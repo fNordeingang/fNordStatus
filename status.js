@@ -7,12 +7,19 @@ var lastPoll;
 var closeAfterMinutes = 5;
 
 http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  var params = url.parse(req.url, true).query;
-  if (!_.isUndefined(params.toggle) && (params.toggle === "fnord")) {
-    lastPoll = new Date();
+  res.writeHead(200, {
+    'Access-Control-Allow-Origin' : '*',
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS, PUT, DELETE',
+    'Access-Control-Allow-Headers': '*',
+    'Content-Type'                : 'application/javascript'
+  });
+  if (req.method === "GET") {
+    var params = url.parse(req.url, true).query;
+    if (!_.isUndefined(params.toggle) && (params.toggle === "fnord")) {
+      lastPoll = new Date();
+    }
+    respondStatus(res);
   }
-  respondStatus(res);
 }).listen(4242, "0.0.0.0");
 console.log('Server running at http://127.0.0.1:4242/');
 
