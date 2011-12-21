@@ -4,7 +4,7 @@ var http = require('http'),
 require('date-utils');
 
 var lastPoll;
-var closeAfterMinutes = 1;
+var closeAfterMinutes = 5;
 
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
