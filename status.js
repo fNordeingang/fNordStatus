@@ -81,6 +81,13 @@ function tweetFnordStatus (status) {
 
 function tweet (msg) {
   twit
-    .updateStatus(msg, function (err, data) {});
+    .verifyCredentials(function (err, data) {
+    console.log(console.dir(err));
+      console.log(console.dir(data));
+    })
+    .updateStatus(msg, function (err, data) {
+      console.log(console.dir(err));
+      console.log(console.dir(data));
+    });
 }
 
