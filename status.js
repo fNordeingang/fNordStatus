@@ -34,10 +34,10 @@ if ( process.argv.length !== 6 ) {
  * initialize twitter with command line arguments
  */
 var twit = new twitter({
-    consumer_key: process.argv[2],
-    consumer_secret: process.argv[3],
-    access_token_key: process.argv[4],
-    access_token_secret: process.argv[5]
+    consumer_key        : process.argv[2],
+    consumer_secret     : process.argv[3],
+    access_token_key    : process.argv[4],
+    access_token_secret : process.argv[5]
 });
 
 
@@ -50,8 +50,8 @@ console.log('Server running at http://127.0.0.1:4242/');
 
 /**
  * main request handling function
- * @param {object} req
- * @param {object} res
+ * @param {object} req the request object
+ * @param {object} res the response object
  */
 function onRequest ( req, res ) {
   setHeaders(res);
@@ -61,7 +61,7 @@ function onRequest ( req, res ) {
 
 /**
  * set additional headers
- * @param {object} res
+ * @param {object} res the response object
  */
 function setHeaders ( res ) {
   res.writeHead(200, {
@@ -76,8 +76,8 @@ function setHeaders ( res ) {
 
 /**
  * decide what type of request to process
- * @param {object} req
- * @param {object} res
+ * @param {object} req the request object
+ * @param {object} res the response object
  */
 function processRequest ( req, res ) {
   if ( req.method === "GET" ) {
@@ -88,8 +88,8 @@ function processRequest ( req, res ) {
 
 /**
  * process GET requests
- * @param {object} req
- * @param {object} res
+ * @param {object} req the request object
+ * @param {object} res the response object
  */
 function doGet ( req, res ) {
   var params = url.parse(req.url, true).query;
@@ -105,7 +105,7 @@ function doGet ( req, res ) {
 /**
  * check last status, tweet if needed and then
  * respond the current status
- * @param {object} res
+ * @param {object} res the response object
  */
 function respondStatus ( res ) {
   var minutesSinceLastPoll = lastPoll === null ?
@@ -129,7 +129,7 @@ function respondStatus ( res ) {
 
 /**
  * tweet the given status
- * @param {boolean} status
+ * @param {boolean} status the status to tweet
  */
 function tweetFnordStatus (status) {
   if ( status ) {
@@ -143,7 +143,7 @@ function tweetFnordStatus (status) {
 
 /**
  * tweet helper function
- * @param {string} msg
+ * @param {string} msg the message to tweet
  */
 function tweet (msg) {
   twit
