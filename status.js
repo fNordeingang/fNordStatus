@@ -12,13 +12,13 @@ var lastPoll = null;
 
 /**
  * what was the last state?
- * @type {boolean}
+ * @type {Boolean}
  */
 var lastState = false;
 
 /**
  * when to close the fNordeingang
- * @type {number}
+ * @type {Number}
  */
 var closeAfterMinutes = 5;
 
@@ -40,23 +40,28 @@ var twit = new twitter({
     access_token_secret: process.argv[5]
 });
 
-http.createServer(onRequest).listen(4242, "0.0.0.0");
 
+/**
+ * create a listening webserver
+ */
+http.createServer(onRequest).listen(4242, "0.0.0.0");
 console.log('Server running at http://127.0.0.1:4242/');
+
 
 /**
  * main request handling function
- * @param req
- * @param res
+ * @param {Object} req
+ * @param {Object} res
  */
 function onRequest ( req, res ) {
   setHeaders(res);
   processRequest(req, res);
 }
 
+
 /**
  * set additional headers
- * @param res
+ * @param {Object} res
  */
 function setHeaders ( res ) {
   res.writeHead(200, {
@@ -68,10 +73,11 @@ function setHeaders ( res ) {
   });
 }
 
+
 /**
  * decide what type of request to process
- * @param req
- * @param res
+ * @param {Object} req
+ * @param {Object} res
  */
 function processRequest ( req, res ) {
   if ( req.method === "GET" ) {
@@ -79,10 +85,11 @@ function processRequest ( req, res ) {
   }
 }
 
+
 /**
  * process GET requests
- * @param req {Object}
- * @param res {Object}
+ * @param {Object} req
+ * @param {Object} res
  */
 function doGet ( req, res ) {
   var params = url.parse(req.url, true).query;
@@ -94,10 +101,11 @@ function doGet ( req, res ) {
   respondStatus(res);
 }
 
+
 /**
  * check last status, tweet if needed and then
  * respond the current status
- * @param res {Object}
+ * @param {Object} res
  */
 function respondStatus ( res ) {
   var minutesSinceLastPoll = lastPoll === null ?
@@ -118,9 +126,10 @@ function respondStatus ( res ) {
   }
 }
 
+
 /**
  * tweet the given status
- * @param status {boolean}
+ * @param {Boolean} status
  */
 function tweetFnordStatus (status) {
   if ( status ) {
@@ -131,9 +140,10 @@ function tweetFnordStatus (status) {
   }
 }
 
+
 /**
  * tweet helper function
- * @param msg {string}
+ * @param {String} msg
  */
 function tweet (msg) {
   twit
