@@ -1,18 +1,38 @@
-var http = require('http'),
-  url = require('url'),
-  _ = require('underscore'),
-  twitter = require('ntwitter'),
-  date_utils = require('date-utils');
+var http        = require('http'),
+    url         = require('url'),
+    _           = require('underscore'),
+    twitter     = require('ntwitter'),
+    date_utils  = require('date-utils');
 
+/**
+ * when did the mpd polled at last?
+ * @type {Date}
+ */
 var lastPoll = null;
+
+/**
+ * what was the last state?
+ * @type {boolean}
+ */
 var lastState = false;
+
+/**
+ * when to close the fNordeingang
+ * @type {number}
+ */
 var closeAfterMinutes = 5;
 
+/**
+ * print usage and exit if correct length of arguments aren't passed
+ */
 if ( process.argv.length !== 6 ) {
   console.log("usage: node status.js [consumer_key] [consumer_secret] [access_token_key] [access_token_secret]");
   process.exit(1);
 }
 
+/**
+ * initialize twitter with command line arguments
+ */
 var twit = new twitter({
     consumer_key: process.argv[2],
     consumer_secret: process.argv[3],
@@ -24,12 +44,20 @@ http.createServer(onRequest).listen(4242, "0.0.0.0");
 
 console.log('Server running at http://127.0.0.1:4242/');
 
-
+/**
+ * main request handling function
+ * @param req
+ * @param res
+ */
 function onRequest ( req, res ) {
   setHeaders(res);
   processRequest(req, res);
 }
 
+/**
+ * set additional headers
+ * @param res
+ */
 function setHeaders ( res ) {
   res.writeHead(200, {
     'Access-Control-Allow-Origin'   : '*',
@@ -40,12 +68,22 @@ function setHeaders ( res ) {
   });
 }
 
+/**
+ * decide what type of request to process
+ * @param req
+ * @param res
+ */
 function processRequest ( req, res ) {
   if ( req.method === "GET" ) {
     doGet(req, res);
   }
 }
 
+/**
+ * process GET requests
+ * @param req {Object}
+ * @param res {Object}
+ */
 function doGet ( req, res ) {
   var params = url.parse(req.url, true).query;
 
@@ -56,6 +94,11 @@ function doGet ( req, res ) {
   respondStatus(res);
 }
 
+/**
+ * check last status, tweet if needed and then
+ * respond the current status
+ * @param res {Object}
+ */
 function respondStatus ( res ) {
   var minutesSinceLastPoll = lastPoll === null ?
     closeAfterMinutes + 1 :
@@ -75,6 +118,10 @@ function respondStatus ( res ) {
   }
 }
 
+/**
+ * tweet the given status
+ * @param status {boolean}
+ */
 function tweetFnordStatus (status) {
   if ( status ) {
     tweet("#fNordeingang is now open! " + lastPoll);
@@ -84,6 +131,10 @@ function tweetFnordStatus (status) {
   }
 }
 
+/**
+ * tweet helper function
+ * @param msg {string}
+ */
 function tweet (msg) {
   twit
     .verifyCredentials(function (err, data) {
@@ -95,4 +146,3 @@ function tweet (msg) {
       console.log(console.dir(data));
     });
 }
-
