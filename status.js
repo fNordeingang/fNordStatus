@@ -50,8 +50,8 @@ console.log('Server running at http://127.0.0.1:4242/');
 
 /**
  * main request handling function
- * @param {Object} req
- * @param {Object} res
+ * @param {object} req
+ * @param {object} res
  */
 function onRequest ( req, res ) {
   setHeaders(res);
