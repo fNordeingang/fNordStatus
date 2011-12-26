@@ -12,13 +12,13 @@ var lastPoll = null;
 
 /**
  * what was the last state?
- * @type {Boolean}
+ * @type {boolean}
  */
 var lastState = false;
 
 /**
  * when to close the fNordeingang
- * @type {Number}
+ * @type {number}
  */
 var closeAfterMinutes = 5;
 
@@ -61,7 +61,7 @@ function onRequest ( req, res ) {
 
 /**
  * set additional headers
- * @param {Object} res
+ * @param {object} res
  */
 function setHeaders ( res ) {
   res.writeHead(200, {
@@ -76,8 +76,8 @@ function setHeaders ( res ) {
 
 /**
  * decide what type of request to process
- * @param {Object} req
- * @param {Object} res
+ * @param {object} req
+ * @param {object} res
  */
 function processRequest ( req, res ) {
   if ( req.method === "GET" ) {
@@ -88,8 +88,8 @@ function processRequest ( req, res ) {
 
 /**
  * process GET requests
- * @param {Object} req
- * @param {Object} res
+ * @param {object} req
+ * @param {object} res
  */
 function doGet ( req, res ) {
   var params = url.parse(req.url, true).query;
@@ -105,7 +105,7 @@ function doGet ( req, res ) {
 /**
  * check last status, tweet if needed and then
  * respond the current status
- * @param {Object} res
+ * @param {object} res
  */
 function respondStatus ( res ) {
   var minutesSinceLastPoll = lastPoll === null ?
@@ -129,7 +129,7 @@ function respondStatus ( res ) {
 
 /**
  * tweet the given status
- * @param {Boolean} status
+ * @param {boolean} status
  */
 function tweetFnordStatus (status) {
   if ( status ) {
@@ -143,7 +143,7 @@ function tweetFnordStatus (status) {
 
 /**
  * tweet helper function
- * @param {String} msg
+ * @param {string} msg
  */
 function tweet (msg) {
   twit
