@@ -8,6 +8,11 @@ var lastPoll = null;
 var lastState = false;
 var closeAfterMinutes = 5;
 
+if ( process.argv.length !== 6 ) {
+  console.log("usage: node status.js [consumer_key] [consumer_secret] [access_token_key] [access_token_secret]");
+  process.exit(1);
+}
+
 var twit = new twitter({
     consumer_key: process.argv[2],
     consumer_secret: process.argv[3],
@@ -82,7 +87,7 @@ function tweetFnordStatus (status) {
 function tweet (msg) {
   twit
     .verifyCredentials(function (err, data) {
-    console.log(console.dir(err));
+      console.log(console.dir(err));
       console.log(console.dir(data));
     })
     .updateStatus(msg, function (err, data) {
