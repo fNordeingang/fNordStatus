@@ -128,6 +128,7 @@ function onIrcMessage ( from, to, message ) {
 
           if ( _.isObject(command) ) {
             _.each(command, function ( func, name ) {
+              var _func = function () {};
               eval("var _func = " + func + ";");
               IrcCommand[name] = _func;
               ircClient.say(channel, "added function: " + name);
