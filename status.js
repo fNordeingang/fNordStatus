@@ -2,6 +2,7 @@ var http        = require('http'),
     url         = require('url'),
     _           = require('underscore'),
     twitter     = require('ntwitter'),
+    irc         = require('irc'),
     date_utils  = require('date-utils');
 
 /**
@@ -40,6 +41,68 @@ var twit = new twitter({
     access_token_secret : process.argv[5]
 });
 
+var nickname = 'fNotJS';
+var channel = "#fnordeingang2";
+
+var ircClient = new irc.Client('irc.freenode.net', nickname, {
+    channels: [channel]
+});
+
+
+ircClient.addListener('message', onIrcMessage);
+
+function onIrcMessage ( from, to, message ) {
+  var command = message.match(/!(\w+)/);
+  command = command ? command.pop() : "";
+
+  if ( from !== nickname ) {
+    if ( IrcCommand.notifyList()[from] ) {
+      ircClient.say(channel, "message from " + IrcCommand.notifyList()[from].from + " for " + from + ": " + IrcCommand.notifyList()[from].message);
+      IrcCommand.notifyList()[from] = null;
+    }
+
+    if ( _.isFunction(IrcCommand[command]) ) {
+      IrcCommand[command](from, to, message);
+    }
+  }
+}
+
+(function (global) {
+  global.IrcCommand = (function () {
+    var notifyList = {};
+
+    return {
+      status: function () {
+        if ( lastState ) {
+          ircClient.say(channel, "fNordeingang is open! :)");
+        }
+        else {
+          ircClient.say(channel, "fNordeingang is closed :(");
+        }
+      },
+
+      notify: function (from, to, message) {
+        message = message.split(" ");
+
+        if ( message.length < 3 ) {
+          ircClient.say(channel, "syntax is: !notify <nickname> <the message>")
+        }
+        else {
+          message.shift();
+          var nickname = message.shift();
+          message = message.join(" ");
+          notifyList[nickname] = { from: from, message: message };
+          ircClient.say(channel, nickname + " will be notified as soon as possible!");
+        }
+      },
+
+      notifyList: function () {
+        return notifyList;
+      }
+    }
+  })();
+
+})(global);
 
 /**
  * create a listening webserver
