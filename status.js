@@ -103,7 +103,7 @@ function onIrcMessage ( from, to, message ) {
         message.shift();
         var query = message.join(" ");
 
-        request("http://wiki.fnordeingang.de/index.php?title=Spezial%3ASuche&search=" + query + "&fulltext=Suchen", function (error, response, body) {
+        request("http://wiki.fnordeingang.de/index.php?title=Spezial%3ASuche&search=" + query + "&fulltext=Suchen&profile=all&redirs=1", function (error, response, body) {
           if (!error && response.statusCode == 200) {
             var $result = $(body);
             if ( $result.find("div.searchresults ul.mw-search-results") ) {
