@@ -104,6 +104,8 @@ function onIrcMessage ( from, to, message ) {
 
 })(global);
 
+
+
 /**
  * create a listening webserver
  */
@@ -211,11 +213,9 @@ function tweetFnordStatus (status) {
 function tweet (msg) {
   twit
     .verifyCredentials(function (err, data) {
-      console.log(console.dir(err));
-      console.log(console.dir(data));
+      if (err) console.log(console.dir(err));
     })
     .updateStatus(msg, function (err, data) {
-      console.log(console.dir(err));
-      console.log(console.dir(data));
+      if (err) console.log(console.dir(err));
     });
 }
