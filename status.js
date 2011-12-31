@@ -41,8 +41,8 @@ var twit = new twitter({
     access_token_secret : process.argv[5]
 });
 
-var nickname = 'fNotJS';
-var channel = "#fnordeingang2";
+var nickname = 'fNot';
+var channel = "#fnordeingang";
 
 var ircClient = new irc.Client('irc.freenode.net', nickname, {
     channels: [channel]
