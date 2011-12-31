@@ -3,6 +3,8 @@ var http        = require('http'),
     _           = require('underscore'),
     twitter     = require('ntwitter'),
     irc         = require('irc'),
+    $           = require('jquery'),
+    request     = require('request'),
     date_utils  = require('date-utils');
 
 /**
@@ -81,7 +83,7 @@ function onIrcMessage ( from, to, message ) {
         }
       },
 
-      notify: function (from, to, message) {
+      notify: function ( from, to, message ) {
         message = message.split(" ");
 
         if ( message.length < 3 ) {
@@ -94,6 +96,27 @@ function onIrcMessage ( from, to, message ) {
           notifyList[nickname] = { from: from, message: message };
           ircClient.say(channel, nickname + " will be notified as soon as possible!");
         }
+      },
+
+      wiki: function ( from, to, message ) {
+        message = message.split(" ");
+        message.shift();
+        var query = message.join(" ");
+
+        request("http://wiki.fnordeingang.de/index.php?title=Spezial%3ASuche&search=" + query + "&fulltext=Suchen", function (error, response, body) {
+          if (!error && response.statusCode == 200) {
+            var $result = $(body);
+            if ( $result.find("div.searchresults ul.mw-search-results") ) {
+              var $resultLinks = $result.find("div.mw-search-result-heading a");
+              var resultLinks = [];
+              $resultLinks.each(function () {
+                resultLinks.push("http://wiki.fnordeingang.de" + $(this).prop("href"));
+              });
+
+              ircClient.say(channel, resultLinks.join("  "));
+            }
+          }
+        });
       },
 
       notifyList: function () {
