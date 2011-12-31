@@ -28,7 +28,7 @@ var closeAfterMinutes = 5;
 /**
  * print usage and exit if correct length of arguments aren't passed
  */
-if ( process.argv.length !== 6 ) {
+if ( process.argv.length < 6 ) {
   console.log("usage: node status.js [consumer_key] [consumer_secret] [access_token_key] [access_token_secret]");
   process.exit(1);
 }
@@ -44,7 +44,7 @@ var twit = new twitter({
 });
 
 var nickname = 'fNot';
-var channel = "#fnordeingang";
+var channel = process.argv[6] || "#fnordeingang";
 
 var ircClient = new irc.Client('irc.freenode.net', nickname, {
     channels: [channel]
@@ -117,6 +117,26 @@ function onIrcMessage ( from, to, message ) {
             }
           }
         });
+      },
+
+      addcommand: function ( from, to, message ) {
+        message = message.split(" ");
+        message.shift();
+
+        try {
+          var command = $.parseJSON(message.join(" "));
+
+          if ( _.isObject(command) ) {
+            _.each(command, function ( func, name ) {
+              eval("var _func = " + func + ";");
+              IrcCommand[name] = _func;
+              ircClient.say(channel, "added function: " + name);
+            });
+          }
+        } catch ( err ) {
+          ircClient.say(channel, "could not parse json");
+          console.log(err);
+        }
       },
 
       notifyList: function () {
