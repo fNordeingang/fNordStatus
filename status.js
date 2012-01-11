@@ -55,7 +55,7 @@ ircClient.addListener('message', onIrcMessage);
 
 function onIrcMessage ( from, to, message ) {
   var command = message.match(/!(\w+)/);
-  command = command ? command.pop() : "";
+  command = command ? command.pop().toLowerCase() : "";
 
   if ( from !== nickname ) {
     if ( IrcCommand.notifyList()[from] ) {
@@ -128,8 +128,8 @@ function onIrcMessage ( from, to, message ) {
 
           if ( _.isObject(command) ) {
             _.each(command, function ( func, name ) {
-              var _func = function () {};
-              eval("var _func = " + func + ";");
+              var _func;
+              eval("_func = " + func + ";");
               IrcCommand[name] = _func;
               ircClient.say(channel, "added function: " + name);
             });
