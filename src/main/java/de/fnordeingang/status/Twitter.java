@@ -21,14 +21,6 @@ public class Twitter {
 
 	twitter4j.Twitter twitter = TwitterFactory.getSingleton();
 
-	public void getTimeline() throws TwitterException {
-		ResponseList<twitter4j.Status> statuses = twitter.getHomeTimeline();
-		logger.info("Showing home timeline.");
-		for (twitter4j.Status status : statuses) {
-			logger.info(String.format("%s:%s", status.getUser().getName(), status.getText()));
-		}
-	}
-
 	public void tweet() {
 		try {
 			String text = String.format(

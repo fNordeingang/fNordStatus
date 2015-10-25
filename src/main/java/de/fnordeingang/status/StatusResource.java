@@ -23,7 +23,6 @@ public class StatusResource {
 
 	@GET
 	public StatusResponse getStatus() throws TwitterException {
-		twitter.getTimeline();
 		return new StatusResponse(
 				status.isOpen(),
 				status.getChangedAt());
