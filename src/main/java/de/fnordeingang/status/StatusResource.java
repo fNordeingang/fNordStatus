@@ -28,6 +28,12 @@ public class StatusResource {
 				status.getChangedAt());
 	}
 
+	@GET
+	@Path("/plain")
+	public String getStatusPlain() throws TwitterException {
+		return String.valueOf(status.isOpen());
+	}
+
 	@POST
 	@Path("/open")
 	public StatusResponse open() {
