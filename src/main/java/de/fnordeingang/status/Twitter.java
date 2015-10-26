@@ -1,7 +1,6 @@
 package de.fnordeingang.status;
 
 import de.fnordeingang.status.config.LocalDateTimeJsonConverter;
-import twitter4j.ResponseList;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 

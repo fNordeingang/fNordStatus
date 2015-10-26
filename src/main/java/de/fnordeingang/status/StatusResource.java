@@ -1,6 +1,7 @@
 package de.fnordeingang.status;
 
 import de.fnordeingang.status.response.StatusResponse;
+import de.fnordeingang.status.spaceapi.SpaceApi;
 import twitter4j.TwitterException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -17,6 +18,9 @@ import java.time.LocalDateTime;
 public class StatusResource {
 	@Inject
 	private Status status;
+
+	@Inject
+	private SpaceApi spaceApi;
 
 	@Inject
 	private Twitter twitter;
@@ -62,5 +66,11 @@ public class StatusResource {
 		}
 
 		return Response.ok().build();
+	}
+
+	@GET
+	@Path("/spaceapi.json")
+	public SpaceApi getSpaceApi() {
+		return spaceApi;
 	}
 }
