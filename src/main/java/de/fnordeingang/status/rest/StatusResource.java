@@ -1,5 +1,7 @@
-package de.fnordeingang.status;
+package de.fnordeingang.status.rest;
 
+import de.fnordeingang.status.Status;
+import de.fnordeingang.status.Twitter;
 import de.fnordeingang.status.response.StatusResponse;
 import de.fnordeingang.status.spaceapi.SpaceApi;
 import twitter4j.TwitterException;
@@ -72,11 +74,5 @@ public class StatusResource {
 		logger.info("received ping");
 
 		return Response.ok().build();
-	}
-
-	@GET
-	@Path("/spaceapi.json")
-	public SpaceApi getSpaceApi() {
-		return spaceApi;
 	}
 }
