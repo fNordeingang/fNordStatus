@@ -10,9 +10,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
+import java.util.logging.Logger;
 
 @ApplicationScoped
-@Produces(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 @Consumes("*/*")
 @Path("/")
 public class StatusResource {
@@ -24,6 +25,9 @@ public class StatusResource {
 
 	@Inject
 	private Twitter twitter;
+
+	@Inject
+	private Logger logger;
 
 	@GET
 	public StatusResponse getStatus() throws TwitterException {
@@ -64,6 +68,8 @@ public class StatusResource {
 		if(!status.isOpen()) {
 			status.open();
 		}
+
+		logger.info("received ping");
 
 		return Response.ok().build();
 	}
