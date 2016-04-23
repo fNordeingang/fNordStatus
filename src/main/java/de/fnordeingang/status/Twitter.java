@@ -6,6 +6,7 @@ import twitter4j.TwitterFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.InternalServerErrorException;
 import java.util.logging.Logger;
 
 import static de.fnordeingang.status.DateTimeHelper.getZonedDateTime;
@@ -16,20 +17,21 @@ public class Twitter {
 	private Logger logger;
 
 	@Inject
-	private Status status;
+	private StatusState statusState;
 
-	twitter4j.Twitter twitter = TwitterFactory.getSingleton();
+	private twitter4j.Twitter twitter = TwitterFactory.getSingleton();
 
-	public void tweet() {
+	void tweetStatus() {
 		try {
 			String text = String.format(
 					"#fnordeingang %s %s",
-					status.isOpen() ? "is now open!" : "has closed, see you soon!",
-					getZonedDateTime(status.getChangedAt())
+					statusState.isOpen() ? "is now open!" : "has closed, see you soon!",
+					getZonedDateTime(statusState.getChangedAt())
 							.format(LocalDateTimeJsonConverter.DATE_TIME_FORMATTER));
 			twitter.updateStatus(text);
-		} catch (TwitterException e) {
+		} catch (TwitterException | IllegalStateException e) {
 			logger.info(e.getMessage());
+			throw new InternalServerErrorException(e.getMessage());
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package de.fnordeingang.status.rest;
 
-import de.fnordeingang.status.Status;
+import de.fnordeingang.status.StatusState;
 import de.fnordeingang.status.Twitter;
 import de.fnordeingang.status.response.StatusResponse;
 import de.fnordeingang.status.spaceapi.SpaceApi;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 @Path("/")
 public class StatusResource {
 	@Inject
-	private Status status;
+	private StatusState statusState;
 
 	@Inject
 	private SpaceApi spaceApi;
@@ -32,43 +32,43 @@ public class StatusResource {
 	private Logger logger;
 
 	@GET
-	public StatusResponse getStatus() throws TwitterException {
+	public StatusResponse getStatusState() throws TwitterException {
 		return new StatusResponse(
-				status.isOpen(),
-				status.getChangedAt());
+				statusState.isOpen(),
+				statusState.getChangedAt());
 	}
 
 	@GET
 	@Path("/plain")
 	public String getStatusPlain() throws TwitterException {
-		return String.valueOf(status.isOpen());
+		return String.valueOf(statusState.isOpen());
 	}
 
 	@POST
 	@Path("/open")
 	public StatusResponse open() {
-		status.open();
+		statusState.open();
 		return new StatusResponse(
-				status.isOpen(),
-				status.getChangedAt());
+				statusState.isOpen(),
+				statusState.getChangedAt());
 	}
 
 	@POST
 	@Path("/close")
 	public StatusResponse close() {
-		status.close();
+		statusState.close();
 		return new StatusResponse(
-				status.isOpen(),
-				status.getChangedAt());
+				statusState.isOpen(),
+				statusState.getChangedAt());
 	}
 
 	@GET
 	@Path("/ping")
 	public Response ping() {
-		status.setLastPing(LocalDateTime.now());
+		statusState.setLastPing(LocalDateTime.now());
 
-		if(!status.isOpen()) {
-			status.open();
+		if(!statusState.isOpen()) {
+			statusState.open();
 		}
 
 		logger.info("received ping");

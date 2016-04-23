@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Produces(MediaType.APPLICATION_JSON)
 public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper> {
 
-	final ObjectMapper mapper = new ObjectMapper();
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	public ObjectMapperContextResolver() {
 		SimpleModule module = new SimpleModule();
